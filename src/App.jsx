@@ -8,7 +8,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Stories from "./components/Stories/Stories";
 import Chatbot from "./components/Chatbot/Chatbot";
 import { Toaster } from "react-hot-toast";
-import HerbDetails from "./components/herbDetails/herbDetails";
+import HerbDetails from "./components/HerbDetails/HerbDetails";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Notfound from "./components/Notfound/Notfound";
