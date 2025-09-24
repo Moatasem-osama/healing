@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
+import { Link } from "react-router-dom";
 
 export default function StoriesList() {
   const [stories, setStories] = useState([]);
@@ -8,8 +9,8 @@ export default function StoriesList() {
   useEffect(() => {
     async function fetchStories() {
       try {
-        const res = await api.get("/herbs/stories/all");
-        setStories(res.data);
+        const {data} = await api.get("/herbs/stories/all");
+        setStories(data);
       } catch (err) {
         console.error("Error fetching stories:", err);
       } finally {
@@ -39,6 +40,7 @@ export default function StoriesList() {
                 alt={story.title}
                 className="rounded-xl h-48 w-full object-cover mb-4"
               />
+              <Link to={`/herbDetails/${story.herb}`}>انتقل إلى عشبة {story.title.split(' ')[0]}</Link>
               <h2 className="text-xl font-bold text-green-900 mb-2">
                 {story.title}
               </h2>

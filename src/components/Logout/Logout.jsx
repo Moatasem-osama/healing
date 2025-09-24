@@ -17,9 +17,7 @@ export default function Logout() {
       const serverMessage =
         error.response?.data?.detail || "فشل تسجيل الخروج، حاول مرة أخرى.";
       toast.error(serverMessage);
-    } finally {
-      // إزالة التوكنات دايمًا سواء حصل Error أو لا
-      localStorage.removeItem("refreshToken");
+    } finally {localStorage.removeItem("refreshToken");
       localStorage.removeItem("accessToken");
       setUserTokenAccess(null);
       setUserTokenRefresh(null);
@@ -29,8 +27,8 @@ export default function Logout() {
 
   return (
     <button
+    className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] text-white px-6 py-2 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold font-[var(--font-noto-arabic)]"
       onClick={logout}
-      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
     >
       تسجيل الخروج
     </button>

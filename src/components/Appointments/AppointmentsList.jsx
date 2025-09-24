@@ -22,7 +22,7 @@ export default function AppointmentsList() {
   }
   async function handleDelete(id) {
     try {
-      await api.delete(`/appointments/all/${id}/`, {
+      await api.delete(`/appointments/${id}/`, {
         headers: { Authorization: `Bearer ${userTokenAccess}` },
       });
       // حدث القائمة بعد الحذف
@@ -39,42 +39,97 @@ export default function AppointmentsList() {
   }, [userTokenAccess]);
 
   return (
-    <div className="p-4">
-      <Link
-        to="add"
-        className="inline-block mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-      >
-        ➕ اضف ميعاد
-      </Link>
+    
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-50 py-12 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-emerald-700 font-cairo">📅 المواعيد</h1>
+            <Link
+              to="add"
+              className="inline-flex items-center bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold text-lg"
+            >
+              <span className="ml-2">➕</span>
+              اضافة موعد جديد
+            </Link>
+          </div>
 
-      <h1 className="text-xl font-bold mb-4">📅 Appointments</h1>
+          {loading ? (
+            <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 text-center">
+              <p className="text-xl text-gray-600">⏳ جاري تحميل المواعيد...</p>
+            </div>
+          ) : appointments.length === 0 ? (
+            <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-12 text-center">
+              <p className="text-2xl text-gray-500 mb-4">🚫 لا توجد مواعيد مضافة</p>
+              <p className="text-gray-600">ابدأ بإضافة أول موعد لك</p>
+            </div>
+          ) : (
+            <div className="grid gap-6">
+              {appointments.map((a) => (
+                <div key={a.id} className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 hover:shadow-lg transition-all duration-300">
+                  <div className="grid md:grid-cols-2 gap-6 mb-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-3">
+                          <span className="text-emerald-700">📅</span>
+                        </div>
+                        <p className="text-lg font-semibold text-emerald-800">{a.date}</p>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-3">
+                          <span className="text-emerald-700">⏰</span>
+                        </div>
+                        <p className="text-lg text-gray-700">{a.time}</p>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-3">
+                          <span className="text-emerald-700">📍</span>
+                        </div>
+                        <p className="text-lg text-gray-700">{a.location}</p>
+                      </div>
+                    </div>
 
-      {loading ? (
-        <p>⏳ Loading appointments...</p>
-      ) : appointments.length === 0 ? (
-        <p>🚫 No appointments found</p>
-      ) : (
-        <ul className="space-y-3">
-          {appointments.map((a) => (
-            <li key={a.id} className="border p-3 rounded shadow-sm bg-white">
-              <p>
-                <b>{a.date}</b> ⏰ {a.time}
-              </p>
-              <p>📍 {a.location}</p>
-              <p>👨‍⚕️ {a.appointments_to}</p>
-              <p>📌 {a.appointment_type}</p>
-              <p>📝 {a.notes_or_details}</p>
-              <button
-                onClick={() => handleDelete(a.id)}
-                className="text-red-600 hover:underline"
-              >
-                🗑️ امسح
-              </button>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-3">
+                          <span className="text-emerald-700">👨‍⚕️</span>
+                        </div>
+                        <p className="text-lg text-gray-700">{a.appointments_to}</p>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-3">
+                          <span className="text-emerald-700">📌</span>
+                        </div>
+                        <p className="text-lg text-gray-700">{a.appointment_type}</p>
+                      </div>
+                    </div>
+                  </div>
 
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+                  {a.notes_or_details && (
+                    <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100 mb-4">
+                      <div className="flex items-center mb-2">
+                        <div className="bg-emerald-100 p-2 rounded-lg ml-2">
+                          <span className="text-emerald-700">📝</span>
+                        </div>
+                        <p className="text-lg font-semibold text-emerald-800">ملاحظات إضافية:</p>
+                      </div>
+                      <p className="text-gray-700 pr-4">{a.notes_or_details}</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end pt-4 border-t border-emerald-100">
+                    <button
+                      onClick={() => handleDelete(a.id)}
+                      className="bg-red-100 text-red-600 px-6 py-2 rounded-xl hover:bg-red-200 transition-all duration-300 font-semibold flex items-center"
+                    >
+                      <span className="ml-2">🗑️</span>
+                      حذف الموعد
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
   );
 }

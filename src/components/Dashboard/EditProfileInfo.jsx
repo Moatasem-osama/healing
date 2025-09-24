@@ -62,8 +62,8 @@ export default function EditProfileInfo() {
   });
 
   return (
-    <div className="p-6 font-cairo">
-      <h1 className="text-2xl mb-4">تعديل البيانات الشخصية</h1>
+      <div className="p-6 font-cairo bg-gray-50 text-gray-800">
+      <h1 className="text-3xl font-bold text-emerald-600 mb-8 text-center">تعديل البيانات الشخصية</h1>
 
       {userInfo && (
         <Formik
@@ -83,65 +83,73 @@ export default function EditProfileInfo() {
           enableReinitialize
         >
           {({ isSubmitting }) => (
-            <Form className="space-y-4">
-              <div>
-                <label className="block">الاسم الأول</label>
-                <Field name="first_name" className="border p-2 w-full rounded" />
-                <ErrorMessage name="first_name" component="div" className="text-red-500" />
+            <Form className="space-y-6 max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الاسم الأول</label>
+                  <Field name="first_name" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                  <ErrorMessage name="first_name" component="div" className="text-red-500 mt-2 text-sm" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الاسم الأخير</label>
+                  <Field name="last_name" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                  <ErrorMessage name="last_name" component="div" className="text-red-500 mt-2 text-sm" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">العمر</label>
+                  <Field name="age" type="number" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                  <ErrorMessage name="age" component="div" className="text-red-500 mt-2 text-sm" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الجنس</label>
+                  <Field as="select" name="gender" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                    <option value="">اختر</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                  </Field>
+                  <ErrorMessage name="gender" component="div" className="text-red-500 mt-2 text-sm" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الوزن</label>
+                  <Field name="weight" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الطول (سم)</label>
+                  <Field name="height" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                </div>
               </div>
 
-              <div>
-                <label className="block">الاسم الأخير</label>
-                <Field name="last_name" className="border p-2 w-full rounded" />
-                <ErrorMessage name="last_name" component="div" className="text-red-500" />
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الأمراض المزمنة</label>
+                  <Field name="diseases" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الحساسية</label>
+                  <Field name="allergies" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                  <label className="block text-lg font-semibold text-emerald-700 mb-3">الأدوية</label>
+                  <Field name="medications" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                </div>
               </div>
 
-              <div>
-                <label className="block">العمر</label>
-                <Field name="age" type="number" className="border p-2 w-full rounded" />
-                <ErrorMessage name="age" component="div" className="text-red-500" />
+              <div className="text-center pt-6">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-emerald-600 text-white px-8 py-4 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  حفظ التعديلات
+                </button>
               </div>
-
-              <div>
-                <label className="block">الجنس</label>
-                <Field as="select" name="gender" className="border p-2 w-full rounded">
-                  <option value="">اختر</option>
-                  <option value="male">ذكر</option>
-                  <option value="female">أنثى</option>
-                </Field>
-                <ErrorMessage name="gender" component="div" className="text-red-500" />
-              </div>
-
-              <div>
-                <label className="block">الأمراض المزمنة</label>
-                <Field name="diseases" className="border p-2 w-full rounded" />
-              </div>
-
-              <div>
-                <label className="block">الحساسية</label>
-                <Field name="allergies" className="border p-2 w-full rounded" />
-              </div>
-
-              <div>
-                <label className="block">الأدوية</label>
-                <Field name="medications" className="border p-2 w-full rounded" />
-              </div>
-              <div>
-                <label className="block">الوزن</label>
-                <Field name="weight" className="border p-2 w-full rounded" />
-              </div>
-              <div>
-                <label className="block">الطول (سم)</label>
-                <Field name="height" className="border p-2 w-full rounded" />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-600"
-              >
-                حفظ التعديلات
-              </button>
             </Form>
           )}
         </Formik>

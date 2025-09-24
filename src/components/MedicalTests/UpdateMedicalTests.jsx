@@ -14,7 +14,6 @@ export default function UpdateMedicalTests() {
 
   const [initialValues, setInitialValues] = useState(null);
 
-  // validation schema
   const validationSchema = Yup.object({
     date: Yup.date().required("التاريخ مطلوب"),
     time: Yup.string().required("الوقت مطلوب"),
@@ -24,7 +23,6 @@ export default function UpdateMedicalTests() {
     notes: Yup.string(),
   });
 
-  // جلب بيانات التحليل
   useEffect(() => {
     async function fetchData() {
       try {
@@ -45,7 +43,7 @@ export default function UpdateMedicalTests() {
         headers: { Authorization: `Bearer ${userTokenAccess}` },
       });
       toast.success("✅ تم تعديل التحليل بنجاح");
-      navigate("/medical-tests");
+      navigate("/medicalTests");
     } catch (err) {
       toast.error(err?.response?.data?.error || "❌ حصل خطأ أثناء التعديل");
     }
@@ -56,45 +54,112 @@ export default function UpdateMedicalTests() {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-md">
-      <Toaster position="top-center" />
-      <h2 className="text-xl font-bold mb-6 text-center text-primary">تعديل التحليل</h2>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-50 py-12 px-6">
+  <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-emerald-100 p-8">
+    <Toaster position="top-center" />
+    <h2 className="text-3xl font-bold text-emerald-700 mb-8 text-center font-cairo">
+      ✏️ تعديل التحليل
+    </h2>
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        enableReinitialize
-      >
-        {({ errors, touched }) => (
-          <Form className="space-y-4">
-            <Field type="date" name="date" className="border p-2 w-full rounded" />
-            {touched.date && errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
+      {({ errors, touched, isSubmitting }) => (
+        <Form className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-lg font-semibold text-emerald-700 mb-3">📅 التاريخ</label>
+              <Field
+                type="date"
+                name="date"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+              />
+              {touched.date && errors.date && (
+                <p className="text-red-500 text-sm mt-2">{errors.date}</p>
+              )}
+            </div>
 
-            <Field type="time" name="time" className="border p-2 w-full rounded" />
-            {touched.time && errors.time && <p className="text-red-500 text-sm">{errors.time}</p>}
+            <div>
+              <label className="block text-lg font-semibold text-emerald-700 mb-3">⏰ الوقت</label>
+              <Field
+                type="time"
+                name="time"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+              />
+              {touched.time && errors.time && (
+                <p className="text-red-500 text-sm mt-2">{errors.time}</p>
+              )}
+            </div>
+          </div>
 
-            <Field type="text" name="title" placeholder="العنوان" className="border p-2 w-full rounded" />
-            {touched.title && errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+          <div>
+            <label className="block text-lg font-semibold text-emerald-700 mb-3">🏷️ العنوان الرئيسي</label>
+            <Field
+              type="text"
+              name="title"
+              placeholder="مثال : تحليل صورة الدم الكاملة (CBC) "
+              className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+            />
+            {touched.title && errors.title && (
+              <p className="text-red-500 text-sm mt-2">{errors.title}</p>
+            )}
+          </div>
 
-            <Field type="text" name="subtitle" placeholder="العنوان الفرعي" className="border p-2 w-full rounded" />
-            {touched.subtitle && errors.subtitle && <p className="text-red-500 text-sm">{errors.subtitle}</p>}
+          <div>
+            <label className="block text-lg font-semibold text-emerald-700 mb-3">📋 العنوان الفرعي</label>
+            <Field
+              type="text"
+              name="subtitle"
+              placeholder="مثال : الهيموغلوبين – كرات الدم البيضاء – الصفائح الدموية"
+              className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+            />
+            {touched.subtitle && errors.subtitle && (
+              <p className="text-red-500 text-sm mt-2">{errors.subtitle}</p>
+            )}
+          </div>
 
-            <Field type="text" name="result" placeholder="النتيجة" className="border p-2 w-full rounded" />
-            {touched.result && errors.result && <p className="text-red-500 text-sm">{errors.result}</p>}
+          <div>
+            <label className="block text-lg font-semibold text-emerald-700 mb-3">✅ النتيجة</label>
+            <Field
+              type="text"
+              name="result"
+              placeholder="الهيموغلوبين: 13.5 g/dL – ضمن المعدل الطبيعي"
+              className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+            />
+            {touched.result && errors.result && (
+              <p className="text-red-500 text-sm mt-2">{errors.result}</p>
+            )}
+          </div>
 
-            <Field as="textarea" name="notes" placeholder="الملاحظات" className="border p-2 w-full rounded" />
-            {touched.notes && errors.notes && <p className="text-red-500 text-sm">{errors.notes}</p>}
+          <div>
+            <label className="block text-lg font-semibold text-emerald-700 mb-3">📝 الملاحظات</label>
+            <Field
+              as="textarea"
+              name="notes"
+              placeholder="أدخل أي ملاحظات إضافية..."
+              rows="4"
+              className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+            />
+            {touched.notes && errors.notes && (
+              <p className="text-red-500 text-sm mt-2">{errors.notes}</p>
+            )}
+          </div>
 
-            <button
-              type="submit"
-              className="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary-light transition"
-            >
-              حفظ التعديلات
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-emerald-600 text-white py-4 px-6 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            💾 حفظ التعديلات
+          </button>
+        </Form>
+      )}
+    </Formik>
+  </div>
+</div>
+
   );
 }

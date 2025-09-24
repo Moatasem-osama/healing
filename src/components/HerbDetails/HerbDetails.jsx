@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "../utils/axiosInstance";
 
 export default function HerbDetails() {
   const { id } = useParams();
@@ -9,9 +9,8 @@ export default function HerbDetails() {
 
   async function fetchDetails() {
     try {
-      let { data } = await axios.get(
-        `https://apis.healing-herb.midoghanam.site/herbs/all/${id}/`,
-        { headers: { "ngrok-skip-browser-warning": "true" } }
+      let { data } = await api.get(
+        `/herbs/herb/${id}/`,
       );
       setDetails(data);
     } catch (err) {

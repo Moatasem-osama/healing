@@ -5,9 +5,8 @@ import Navbar from '../Navbar/Navbar'
 export default function Layout() {
   return (<>
     <Navbar/>
-    <div className="mt-36">
+    <div className="mt-20">
     <Outlet/>
-
     </div>
   </>
   )

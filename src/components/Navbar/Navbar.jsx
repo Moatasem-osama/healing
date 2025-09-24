@@ -2,9 +2,11 @@ import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import Logout from "../Logout/Logout";
+import subLogo from "../../assets/sub-logo.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   let { userTokenAccess } = useContext(userContext);
 
   const navItems = [
@@ -12,77 +14,134 @@ export default function Navbar() {
     { path: "/dashboard", label: "لوحة التحكم", icon: "fa-gauge" },
     { path: "/appointments", label: "المواعيد", icon: "fa-calendar-days" },
     { path: "/library", label: "المكتبة", icon: "fa-book" },
+  ];
+
+  const dropdownItems = [
     { path: "/stories", label: "القصص التراثية", icon: "fa-feather" },
     { path: "/community/recipes", label: "المجتمع", icon: "fa-users" },
-    { path: "/medicalTests", label: "التحاليل", icon: "fa-test" },
+    { path: "/medicalTests", label: "التحاليل", icon: "fa-file-medical" },
   ];
 
   const linkClass = ({ isActive }) =>
-    `flex items-center gap-2 px-2 py-1 rounded transition focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary-dark)] ${
+    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-semibold text-lg font-[var(--font-noto-arabic)] ${
       isActive
-        ? "text-white font-semibold bg-[var(--color-primary-light)]"
-        : "hover:text-white"
+        ? "bg-emerald-600 text-white shadow-lg"
+        : "text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
     }`;
 
   const AuthLinks = () => (
-    <div className="flex gap-4">
-      <NavLink to="/" className="text-black">
+    <div className="flex gap-4 font-[var(--font-noto-arabic)]">
+      <NavLink
+        to="/"
+        className="bg-emerald-600 text-white px-6 py-2 rounded-xl hover:bg-emerald-700 transition-all duration-300 font-semibold"
+      >
         Register
       </NavLink>
-      <NavLink to="/login" className="text-black">
+      <NavLink
+        to="/login"
+        className="bg-emerald-100 text-emerald-700 px-6 py-2 rounded-xl hover:bg-emerald-200 transition-all duration-300 font-semibold"
+      >
         Login
       </NavLink>
     </div>
   );
 
   return (
-    <nav className="bg-[var(--color-primary)]/70 backdrop-blur-md fixed top-0 inset-x-0 z-50 shadow-md">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="bg-[#f1f2ec] backdrop-blur-lg fixed top-0 inset-x-0 z-50 shadow-sm border-b border-emerald-100 font-[var(--font-noto-arabic)]">
+      <div className="mx-auto px-6 py-1 flex justify-between items-center">
         <NavLink
           to="/"
-          className="text-2xl font-bold text-[var(--color-secondary)] flex items-center gap-2"
+          className="text-2xl font-bold text-emerald-700 flex items-center gap-3"
         >
-          <i className="fa-solid fa-leaf"></i> عشبة شفاء
+          <img src={subLogo} alt="subLogo" className="w-36" />
         </NavLink>
 
         {userTokenAccess && (
-          <ul className="hidden md:flex gap-6 text-[var(--color-secondary)] font-medium">
+          <div className="hidden md:flex items-center gap-2 font-medium">
             {navItems.map((item) => (
-              <li key={item.path}>
-                <NavLink to={item.path} end={item.end} className={linkClass}>
-                  <i className={`fa-solid ${item.icon}`}></i> {item.label}
-                </NavLink>
-              </li>
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.end}
+                className={linkClass}
+              >
+                <i className={`fa-solid ${item.icon}`}></i> {item.label}
+              </NavLink>
             ))}
-          </ul>
+
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center gap-2 bg-emerald-100 px-4 py-2 rounded-xl text-emerald-700 font-semibold hover:bg-emerald-200 transition"
+              >
+                المزيد <i className="fa-solid fa-caret-down"></i>
+              </button>
+              {dropdownOpen && (
+                <ul className="absolute right-0 mt-2 w-56 bg-white border border-emerald-100 rounded-xl shadow-lg z-50">
+                  {dropdownItems.map((item) => (
+                    <li key={item.path}>
+                      <NavLink
+                        to={item.path}
+                        className={linkClass}
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <i className={`fa-solid ${item.icon}`}></i> {item.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         )}
 
-        {userTokenAccess ? <Logout /> : <AuthLinks />}
+        <div className="hidden md:block">
+          {userTokenAccess ? (
+              <Logout />
+          ) : (
+            <AuthLinks />
+          )}
+        </div>
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden cursor-pointer text-[var(--color-secondary)] focus:outline-none text-2xl"
+          className="md:hidden cursor-pointer text-emerald-700 focus:outline-none text-2xl bg-emerald-100 w-10 h-10 rounded-xl flex items-center justify-center hover:bg-emerald-200 transition-all duration-300"
+          aria-label="Toggle menu"
         >
           <i className={`fa-solid ${isOpen ? "fa-xmark" : "fa-bars"}`}></i>
         </button>
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-[var(--color-primary)] text-[var(--color-secondary)] px-6 py-4 space-y-4 animate-slideDown">
+        <div className="md:hidden bg-white/95 backdrop-blur-lg border-b border-emerald-100 px-6 py-4 space-y-2 animate-slideDown">
           {userTokenAccess &&
-            navItems.map((item) => (
+            [...navItems, ...dropdownItems].map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 end={item.end}
-                className={linkClass}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-semibold text-lg font-[var(--font-noto-arabic)] ${
+                    isActive
+                      ? "bg-emerald-600 text-white shadow-lg"
+                      : "text-emerald-700 hover:bg-emerald-100"
+                  }`
+                }
                 onClick={() => setIsOpen(false)}
               >
                 <i className={`fa-solid ${item.icon}`}></i> {item.label}
               </NavLink>
             ))}
 
-          {userTokenAccess ? <Logout /> : <AuthLinks />}
+          <div className="pt-4 border-t border-emerald-100">
+            {userTokenAccess ? (
+              <button className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] text-white px-6 py-2 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold font-[var(--font-noto-arabic)]">
+                <Logout />
+              </button>
+            ) : (
+              <AuthLinks />
+            )}
+          </div>
         </div>
       )}
     </nav>

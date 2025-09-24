@@ -5,6 +5,7 @@ import { userContext } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Report from "../Report/Report";
+import Loader from "../Loader/Loader";
 
 export default function Dashboard() {
   let { userTokenAccess } = useContext(userContext);
@@ -20,8 +21,6 @@ export default function Dashboard() {
           },
         }
       );
-      console.log(data);
-      
       setUserInfo(data.user);
     } catch (err) {
       toast.error("خطأ في تحميل البيانات");
@@ -33,12 +32,12 @@ export default function Dashboard() {
   }, []);
 
   return (
-   <>
-      {userInfo && (
-        <section className="min-h-screen bg-gray-50 font-cairo" style={{marginTop: '-150px',}}>
+    <>
+    
+      {!userInfo ? <Loader/> : (
+        <section className="min-h-screen bg-gray-50 font-cairo">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col lg:flex-row gap-6">
-              {/* Sidebar */}
               <aside className="w-full lg:w-1/4 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
@@ -108,14 +107,18 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="flex items-start">
-                   <i className="fa fa-weight"></i>
+                    <div className="text-emerald-600 pt-1">
+                      <i className="fa-solid fa-weight-hanging fa-2x"></i>
+                    </div>
                     <div>
                       <span className="text-gray-600">الوزن: </span>
                       <p className="mr-2 text-gray-800 font-medium">{userInfo?.weight || "لا يوجد"}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                   <i className="fa fa-height"></i>
+                    <div className="text-emerald-600 pt-1">
+                      <i className="fa-solid fa-ruler-vertical fa-2x"></i>
+                    </div>
                     <div>
                       <span className="text-gray-600">الطول: </span>
                       <p className="mr-2 text-gray-800 font-medium">{userInfo?.height || "لا يوجد"}</p>
@@ -132,14 +135,13 @@ export default function Dashboard() {
                   </svg>
                   تعديل البيانات
                 </Link>
-                <Report/>
+                <Report />
               </aside>
 
-              {/* Main Content */}
               <main className="w-full lg:w-3/4">
                 <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
                   <h1 className="text-2xl font-bold text-gray-800 mb-6">نظرة عامة</h1>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-5 border border-emerald-100">
                       <div className="flex items-center">

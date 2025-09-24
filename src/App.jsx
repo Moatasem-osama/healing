@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import Home from "./components/Home/Home";
@@ -21,7 +21,7 @@ import EditAppointment from "./components/Appointments/EditAppointment";
 import DeleteAppointment from "./components/Appointments/DeleteAppointment";
 // import MedicalTests from "./components/MedicalTests/MedicalTests";
 import PostMedicalTest from "./components/MedicalTests/PostMedicalTest";
-import CreatePost from "./components/Community/components/CreatePost";
+// import CreatePost from "./components/Community/components/CreatePost";
 import MedicalTests from "./components/MedicalTests/MedicalTests";
 import UpdateMedicalTests from "./components/MedicalTests/UpdateMedicalTests";
 import Recipe from "./components/Community/Recipe";
@@ -29,9 +29,9 @@ import RecipeDetail from "./components/Community/RecipeDeatails";
 
 
 
-let routers = createBrowserRouter([
+let routers = createHashRouter([
   {
-    path: "",
+    path: "/",
     element: <Layout />,
     children: [
       { index: true, element: <Register /> },
@@ -49,7 +49,7 @@ let routers = createBrowserRouter([
       { path: "appointments/delete/:id", element: <ProtectedRoute><DeleteAppointment /></ProtectedRoute> },
       { path: "community/recipes", element: <ProtectedRoute><Recipe /></ProtectedRoute> },
       { path: "community/recipes/:id", element: <ProtectedRoute><RecipeDetail /></ProtectedRoute> },
-      { path: "createPost", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
+      // { path: "createPost", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
       { path: "medicalTests", element: <ProtectedRoute><MedicalTests /></ProtectedRoute> },
       { path: "herbDetails/:id", element: <HerbDetails /> },
       { path: "chatbot", element: <ProtectedRoute><Chatbot /></ProtectedRoute> },
