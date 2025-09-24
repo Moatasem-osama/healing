@@ -4,7 +4,7 @@ import api from "../utils/axiosInstance";
 import { userContext } from "../../context/UserContext";
 import Loader from "../Loader/Loader";
 
-export default function RecipeDetail() {
+export default function RecipeDetails() {
   const { id } = useParams();
   let { userTokenAccess } = useContext(userContext);
   const [recipe, setRecipe] = useState(null);

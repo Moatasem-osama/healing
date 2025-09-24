@@ -13,7 +13,7 @@ import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Notfound from "./components/Notfound/Notfound";
 import UserContextProvider from "./context/UserContext";
-import ProtectedRoute from "./components/ProtectedRoute/protectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import EditProfileInfo from "./components/Dashboard/EditProfileInfo";
 import AppointmentsList from "./components/Appointments/AppointmentsList";
 import AddAppointment from "./components/Appointments/AddAppointment";
@@ -25,7 +25,7 @@ import PostMedicalTest from "./components/MedicalTests/PostMedicalTest";
 import MedicalTests from "./components/MedicalTests/MedicalTests";
 import UpdateMedicalTests from "./components/MedicalTests/UpdateMedicalTests";
 import Recipe from "./components/Community/Recipe";
-import RecipeDetail from "./components/Community/RecipeDeatails";
+import RecipeDetails from "./components/Community/RecipeDetails";
 
 
 
@@ -48,7 +48,7 @@ let routers = createHashRouter([
       { path: "appointments/edit/:id", element: <ProtectedRoute><EditAppointment /></ProtectedRoute> },
       { path: "appointments/delete/:id", element: <ProtectedRoute><DeleteAppointment /></ProtectedRoute> },
       { path: "community/recipes", element: <ProtectedRoute><Recipe /></ProtectedRoute> },
-      { path: "community/recipes/:id", element: <ProtectedRoute><RecipeDetail /></ProtectedRoute> },
+      { path: "community/recipes/:id", element: <ProtectedRoute><RecipeDetails /></ProtectedRoute> },
       // { path: "createPost", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
       { path: "medicalTests", element: <ProtectedRoute><MedicalTests /></ProtectedRoute> },
       { path: "herbDetails/:id", element: <HerbDetails /> },
