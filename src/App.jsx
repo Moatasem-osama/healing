@@ -21,11 +21,14 @@ import EditAppointment from "./components/Appointments/EditAppointment";
 import DeleteAppointment from "./components/Appointments/DeleteAppointment";
 // import MedicalTests from "./components/MedicalTests/MedicalTests";
 import PostMedicalTest from "./components/MedicalTests/PostMedicalTest";
-// import CreatePost from "./components/Community/components/CreatePost";
+import CreatePost from "./components/Community/components/CreatePost";
 import MedicalTests from "./components/MedicalTests/MedicalTests";
 import UpdateMedicalTests from "./components/MedicalTests/UpdateMedicalTests";
 import Recipe from "./components/Community/Recipe";
 import RecipeDetails from "./components/Community/RecipeDetails";
+import Answer from "./components/Community/Questions/Answer";
+import QuestionDetail from "./components/Community/Questions/QuestionDetail";
+import DataContextProvider from "./context/DataContext";
 
 
 
@@ -34,9 +37,9 @@ let routers = createHashRouter([
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Register /> },
+      { path: 'register', element: <Register /> },
       { path: "library", element: <ProtectedRoute> <Library /></ProtectedRoute> },
-      { path: "home", element: <ProtectedRoute><Home /></ProtectedRoute> },
+      { index: true, element: <ProtectedRoute><Home /></ProtectedRoute> },
       { path: "editProfile", element: <ProtectedRoute><EditProfileInfo /></ProtectedRoute> },
       { path: "login", element: <Login /> },
       { path: "dashboard", element: <ProtectedRoute> <Dashboard /></ProtectedRoute> },
@@ -48,8 +51,9 @@ let routers = createHashRouter([
       { path: "appointments/edit/:id", element: <ProtectedRoute><EditAppointment /></ProtectedRoute> },
       { path: "appointments/delete/:id", element: <ProtectedRoute><DeleteAppointment /></ProtectedRoute> },
       { path: "community/recipes", element: <ProtectedRoute><Recipe /></ProtectedRoute> },
+      { path: "community/questions/:id", element: <ProtectedRoute><QuestionDetail /></ProtectedRoute> },
       { path: "community/recipes/:id", element: <ProtectedRoute><RecipeDetails /></ProtectedRoute> },
-      // { path: "createPost", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
+      { path: "community/recipes/add", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
       { path: "medicalTests", element: <ProtectedRoute><MedicalTests /></ProtectedRoute> },
       { path: "herbDetails/:id", element: <HerbDetails /> },
       { path: "chatbot", element: <ProtectedRoute><Chatbot /></ProtectedRoute> },
@@ -61,8 +65,11 @@ let routers = createHashRouter([
 export default function App() {
   return <>
     <UserContextProvider>
+    <DataContextProvider>
+
       <RouterProvider router={routers} />
       <Toaster />
+    </DataContextProvider>
 
     </UserContextProvider>
 

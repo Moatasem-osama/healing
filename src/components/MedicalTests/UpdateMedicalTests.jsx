@@ -31,7 +31,7 @@ export default function UpdateMedicalTests() {
         });
         setInitialValues(data);
       } catch (err) {
-        toast.error("❌ فشل في جلب بيانات التحليل");
+        toast.error(err?.response?.data?.error || "❌ حصل خطأ أثناء التعديل");
       }
     }
     fetchData();

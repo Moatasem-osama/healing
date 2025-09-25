@@ -10,7 +10,7 @@ export default function Navbar() {
   let { userTokenAccess } = useContext(userContext);
 
   const navItems = [
-    { path: "/home", label: "الرئيسية", icon: "fa-house", end: true },
+    { path: "/", label: "الرئيسية", icon: "fa-house", end: true },
     { path: "/dashboard", label: "لوحة التحكم", icon: "fa-gauge" },
     { path: "/appointments", label: "المواعيد", icon: "fa-calendar-days" },
     { path: "/library", label: "المكتبة", icon: "fa-book" },
@@ -30,18 +30,18 @@ export default function Navbar() {
     }`;
 
   const AuthLinks = () => (
-    <div className="flex gap-4 font-[var(--font-noto-arabic)]">
+    <div className="flex gap-4 font-sans">
       <NavLink
-        to="/"
+        to="/register"
         className="bg-emerald-600 text-white px-6 py-2 rounded-xl hover:bg-emerald-700 transition-all duration-300 font-semibold"
       >
-        Register
+        تسجيل
       </NavLink>
       <NavLink
         to="/login"
         className="bg-emerald-100 text-emerald-700 px-6 py-2 rounded-xl hover:bg-emerald-200 transition-all duration-300 font-semibold"
       >
-        Login
+        تسجيل دخول
       </NavLink>
     </div>
   );
@@ -134,10 +134,8 @@ export default function Navbar() {
             ))}
 
           <div className="pt-4 border-t border-emerald-100">
-            {userTokenAccess ? (
-              <button className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] text-white px-6 py-2 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold font-[var(--font-noto-arabic)]">
-                <Logout />
-              </button>
+            {userTokenAccess ? ( <Logout />
+            
             ) : (
               <AuthLinks />
             )}

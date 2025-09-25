@@ -26,7 +26,7 @@ export default function Login() {
       setUserTokenRefresh(data.tokens.refresh);
 
       toast.success("تم تسجيل الدخول بنجاح!");
-      navigate("/home");
+      navigate("/");
     } catch (error) {
         let serverMessage = error.response.data.error;
         
@@ -62,9 +62,10 @@ export default function Login() {
     onSubmit: login,
   });
 
-  return (
+  return (<div className="flex items-center justify-center min-h-screen ">
+
      <form
-        className="w-full max-w-md mx-auto p-8 bg-white/95]backdrop-blur-lg rounded-2xl shadow-2xl shadow-primary/20 border border-white/20"
+        className="w-full max-w-md mx-auto p-8 bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl shadow-primary/20 border border-white/20 "
         onSubmit={formik.handleSubmit}
       >
         <div className="mb-6">
@@ -132,5 +133,6 @@ export default function Login() {
           </button>
         )}
       </form>
+  </div>
   );
 }

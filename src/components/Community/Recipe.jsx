@@ -3,6 +3,7 @@ import api from "../utils/axiosInstance";
 import { userContext } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import Questions from "./Questions/Questions";
 
 export default function Recipe() {
   let { userTokenAccess } = useContext(userContext);
@@ -35,19 +36,19 @@ export default function Recipe() {
       {recipes.length === 0 ? (
         <Loader />
       ) : (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-50 py-12 px-6 font-cairo" >
+        <div className="min-h-screen py-12 px-6 font-cairo" >
           <div className="max-w-4xl mx-auto">
             <header className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold text-emerald-700 mb-4">
                 مجتمعنا
               </h1>
               <p className="text-lg text-gray-600 mb-6">مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي</p>
-              {/* <Link
-                to={"/createPost"}
+              <Link
+                to={"add"}
                 className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold"
               >
                 أضف وصفة جديدة 🌿
-              </Link> */}
+              </Link>
             </header>
 
             <div className="grid gap-6">
@@ -75,6 +76,8 @@ export default function Recipe() {
           </div>
         </div>
       )}
+
+      <Questions/>
     </>
   );
 }

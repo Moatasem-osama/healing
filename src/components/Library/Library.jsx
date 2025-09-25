@@ -14,8 +14,7 @@ let navigate = useNavigate();
       );
       setHerbs(data);
     } catch (error) {
-      console.error("Error fetching herbs:", error);
-      toast.error("فشل في جلب البيانات");
+      toast.error("فشل في جلب البيانات" );
     }
   }
 

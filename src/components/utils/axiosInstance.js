@@ -63,7 +63,6 @@ api.interceptors.response.use(
         // جرّب نفس الـ request تاني
         return api(originalRequest);
       } catch (err) {
-        // لو refreshToken نفسه بايظ → رجّع المستخدم للـ login
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";

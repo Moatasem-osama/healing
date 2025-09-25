@@ -1,60 +1,132 @@
+import { useState, useContext } from "react";
+import api from "../../utils/axiosInstance";
+import { userContext } from "../../../context/UserContext";
+import toast from "react-hot-toast";
 
-// return (
-//   <div className="p-6 font-cairo">
-//     <button
-//       onClick={onCancel}
-//       className="flex items-center text-emerald-600 hover:text-emerald-700 mb-8 transition-all duration-300 font-semibold"
-//     >
-//       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-//       </svg>
-//       العودة إلى القائمة
-//     </button>
+export default function CreatePost({ onSuccess }) {
+  const { userTokenAccess } = useContext(userContext);
 
-//     <div className="bg-white p-8 rounded-2xl shadow-sm border border-emerald-100">
-//       <h2 className="text-3xl font-bold text-emerald-700 mb-8 text-center">إنشاء منشور جديد</h2>
-      
-//       <form onSubmit={handleSubmit}>
-//         <div className="mb-6">
-//           <label htmlFor="title" className="block text-lg font-semibold text-emerald-700 mb-3">عنوان المنشور</label>
-//           <input
-//             type="text"
-//             id="title"
-//             className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-//             placeholder="أدخل عنوانًا جذابًا..."
-//             value={newPost.title}
-//             onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-//           />
-//         </div>
-        
-//         <div className="mb-8">
-//           <label htmlFor="content" className="block text-lg font-semibold text-emerald-700 mb-3">محتوى المنشور</label>
-//           <textarea
-//             id="content"
-//             rows="6"
-//             className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-//             placeholder="ماذا تريد أن تقول للمجتمع؟"
-//             value={newPost.content}
-//             onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-//           ></textarea>
-//         </div>
-        
-//         <div className="flex justify-end space-x-4 space-x-reverse">
-//           <button
-//             type="button"
-//             onClick={onCancel}
-//             className="bg-gray-200 text-gray-700 py-3 px-8 rounded-xl hover:bg-gray-300 transition-all duration-300 font-semibold"
-//           >
-//             إلغاء
-//           </button>
-//           <button
-//             type="submit"
-//             className="bg-emerald-600 text-white py-3 px-8 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold mr-4"
-//           >
-//             نشر المنشور
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   </div>
-// );
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    ingredients: "",
+    instructions: "",
+    // ممكن تضيف حقول أخرى مثل image, category إذا تحتاجها
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await api.post(
+        "/community/recipes/",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${userTokenAccess}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("تم إنشاء الوصفة بنجاح!");
+      // تنظيف الفورم
+      setForm({
+        title: "",
+        description: "",
+        ingredients: "",
+        instructions: "",
+      });
+      if (onSuccess) onSuccess(data);  // تمرير الرد إذا تحب
+    } catch (err) {
+      console.error("❌ Error creating recipe:", err.response?.data || err);
+      toast.error("تم رفض الوصفة من قبل نظام المراجعة الآلي. يرجى تصحيح البيانات.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-start pt-8 px-4">
+      <div className="max-w-xl w-full bg-white rounded-xl shadow border border-emerald-100 p-6">
+        <h2 className="text-2xl font-bold text-emerald-700 mb-4 text-center">
+          إنشاء وصفة جديدة
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-base font-medium text-emerald-700 mb-1">
+              العنوان
+            </label>
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-emerald-700 mb-1">
+              الوصف
+            </label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              rows="3"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-emerald-700 mb-1">
+              المكونات
+            </label>
+            <textarea
+              name="ingredients"
+              value={form.ingredients}
+              onChange={handleChange}
+              rows="3"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-emerald-700 mb-1">
+              التعليمات
+            </label>
+            <textarea
+              name="instructions"
+              value={form.instructions}
+              onChange={handleChange}
+              rows="4"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+              required
+            />
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-6 py-2 rounded-lg text-white ${
+                loading ? "bg-emerald-300" : "bg-emerald-600 hover:bg-emerald-700"
+              } transition`}
+            >
+              {loading ? "جاري الإنشاء..." : "إنشاء الوصفة"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

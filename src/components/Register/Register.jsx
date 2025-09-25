@@ -196,7 +196,7 @@ export default function Register() {
       setUserTokenRefresh(data.tokens.refresh);
 
       toast.success("تم التسجيل بنجاح!");
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       let serverMessage = error.response?.data?.error;
       let translatedMessage =

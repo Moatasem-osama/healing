@@ -3,9 +3,11 @@ import api from "../utils/axiosInstance";
 import { userContext } from "../../context/UserContext";
 import Loader from "../Loader/Loader";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../context/DataContext";
 
 export default function MedicalTests() {
   const { userTokenAccess } = useContext(userContext);
+  const { setTestsCount } = useContext(DataContext);
   const [medicalTests, setMedicalTests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,6 +17,7 @@ export default function MedicalTests() {
         headers: { Authorization: `Bearer ${userTokenAccess}` },
       });
       setMedicalTests(data.medicalTests);
+      setTestsCount(data.medicalTests.length);
     } catch (err) {
       console.error("❌ Error fetching medicalTests:", err.response?.data?.error || err);
     } finally {

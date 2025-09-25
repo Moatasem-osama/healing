@@ -1,7 +1,54 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 export default function Home() {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const observerRef = useRef(null);
+
+  const startCounting = useCallback(() => {
+    const end = 50000;
+    const duration = 2000;
+    const startTime = performance.now();
+    
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      setCount(Math.ceil(progress * end));
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  }, []);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          startCounting();
+          setHasAnimated(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observerRef.current.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observerRef.current.unobserve(currentRef);
+      }
+    };
+  }, [hasAnimated, startCounting]);
+
   return (
      <div className="font-cairo bg-gray-50 text-gray-800" >
 
@@ -194,8 +241,8 @@ export default function Home() {
                 <p className="text-4xl font-bold mb-2">65%</p>
                 <p>يستخدمون الأعشاب بجانب الأدوية</p>
               </div>
-              <div className="bg-white bg-opacity-10 p-6 rounded-2xl backdrop-blur-sm text-emerald-900">
-                <p className="text-4xl font-bold mb-2">50,000</p>
+              <div ref={ref} className="bg-white bg-opacity-10 p-6 rounded-2xl backdrop-blur-sm text-emerald-900">
+                <p className="text-4xl font-bold mb-2">{count.toLocaleString()}</p>
                 <p>مستخدم متوقع في أول سنة</p>
               </div>
             </div>
