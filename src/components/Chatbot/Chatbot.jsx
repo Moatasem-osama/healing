@@ -10,28 +10,20 @@ export default function Chatbot() {
   const [inputValue, setInputValue] = useState("");
   const [username, setUsername] = useState("");
   const [nameSubmitted, setNameSubmitted] = useState(false);
+  const [error, setError] = useState(null);
 
-  let { userTokenAccess } = useContext(userContext);
+  const { userTokenAccess } = useContext(userContext);
 
-  // إنشاء تذكرة جديدة بعد إدخال الاسم
   async function getTicket(name) {
     try {
       const { data } = await api.get(`/ai/getNewTicket/?name=${name}`, {
-        headers: {
-          Authorization: `Bearer ${userTokenAccess}`,
-        },
+        headers: { Authorization: `Bearer ${userTokenAccess}` },
       });
-
       setTicket(data.ticket);
-      console.log("🎟️ New Ticket:", data.ticket);
-
-      // أول رسالة ترحيب
       setMessages([{ text: `مرحبًا ${name}! كيف يمكنني مساعدتك اليوم؟`, isBot: true }]);
-    } catch (error) {
-      console.error("Error getting ticket:", error);
-      setMessages([
-        { text: "تعذر بدء محادثة جديدة، حاول مرة أخرى.", isBot: true },
-      ]);
+    } catch {
+      setError("تعذر بدء محادثة جديدة، حاول مرة أخرى.");
+      setMessages([{ text: "تعذر بدء محادثة جديدة، حاول مرة أخرى.", isBot: true }]);
     }
   }
 
@@ -41,7 +33,6 @@ export default function Chatbot() {
     }
   }, [userTokenAccess, nameSubmitted, username]);
 
-  // إرسال رسالة
   async function handleSendMessage() {
     if (!inputValue.trim() || !ticket) return;
 
@@ -53,33 +44,23 @@ export default function Chatbot() {
     try {
       const { data } = await api.post(
         "/ai/chat/",
-        {
-          ticketCode: ticket.code,
-          message: userMessage,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userTokenAccess}`,
-          },
-        }
+        { ticketCode: ticket.code, message: userMessage },
+        { headers: { Authorization: `Bearer ${userTokenAccess}` } }
       );
-
       setMessages((prev) => [
         ...prev,
         { text: data.reply || "لم يتم استلام رد.", isBot: true },
       ]);
-    } catch (error) {
-      console.error("Error sending message:", error.response?.data || error.message);
+    } catch {
       setMessages((prev) => [
         ...prev,
-        { text: "حصل خطأ أثناء إرسال الرسالة.", isBot: true },
+        { text: "حدث خطأ أثناء إرسال الرسالة.", isBot: true },
       ]);
     } finally {
       setIsLoading(false);
     }
   }
 
-  // إدخال الاسم في البداية
   function handleNameSubmit(e) {
     e.preventDefault();
     if (!username.trim()) return;
@@ -92,72 +73,90 @@ export default function Chatbot() {
         عشبة شفاء بوت
       </h1>
 
-      {/* لو الاسم لسه متحددش */}
       {!nameSubmitted ? (
         <form
           onSubmit={handleNameSubmit}
-          className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-lg"
+          className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-lg space-y-4"
+          aria-label="نموذج إدخال الاسم لبدء المحادثة"
         >
-          <label className="block mb-2 font-semibold text-gray-700">
+          <label htmlFor="username" className="block font-semibold text-gray-700">
             من فضلك أدخل اسمك للبدء:
           </label>
           <input
+            id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="اكتب اسمك..."
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+            required
+            aria-required="true"
           />
           <button
             type="submit"
-            className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
           >
             بدء المحادثة
           </button>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
         </form>
       ) : (
         <>
-          {/* الرسائل */}
-          <div className="flex-1 overflow-y-auto mb-4 px-2 md:px-8">
+          <div
+            className="flex-1 overflow-y-auto mb-4 px-2 md:px-8"
+            aria-live="polite"
+            aria-label="منطقة الرسائل"
+          >
             <div className="flex flex-col gap-4 max-w-4xl mx-auto">
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-2xl shadow-lg max-w-xs md:max-w-md lg:max-w-lg ${
+                  className={`p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg break-words ${
                     msg.isBot
-                      ? "bg-emerald-900 text-white mr-auto text-right"
-                      : "bg-white/90 ml-auto text-right"
+                      ? "bg-emerald-900 text-white mr-auto"
+                      : "bg-white/90 ml-auto"
                   }`}
+                  role="text"
                 >
                   <ReactMarkdown>{msg.text}</ReactMarkdown>
                 </div>
               ))}
 
               {isLoading && (
-                <div className="p-4 rounded-2xl shadow-lg max-w-xs md:max-w-md lg:max-w-lg bg-emerald-900 text-white mr-auto text-right">
-                  <i className="fa fa-spinner fa-spin mr-2"></i> جاري التفكير...
+                <div className="p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg bg-emerald-900 text-white mr-auto">
+                  <span className="animate-pulse">جاري التفكير...</span>
                 </div>
               )}
             </div>
           </div>
 
-          {/* صندوق الإدخال */}
           <div className="px-2 md:px-8 pb-4 mt-auto">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center bg-white/90 shadow-xl rounded-full px-4 py-2 w-full">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+                className="flex items-center bg-white shadow-xl rounded-full px-4 py-2"
+                aria-label="صندوق إدخال الرسالة"
+              >
                 <i className="fa-solid fa-robot text-green-700 mr-2"></i>
-                <input
-                  type="text"
+                <textarea
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder="اكتب سؤالك هنا..."
-                  className="flex-1 bg-transparent outline-none px-2"
+                  className="flex-1 bg-transparent outline-none px-2 resize-none"
+                  rows={1}
+                  aria-label="حقل إدخال الرسالة"
                 />
-                <button onClick={handleSendMessage} className="ml-2">
-                  <i className="fa-solid fa-paper-plane text-green-700"></i>
+                <button
+                  type="submit"
+                  className="ml-2 text-green-700 hover:text-green-900 transition"
+                  aria-label="إرسال الرسالة"
+                >
+                  <i className="fa-solid fa-paper-plane"></i>
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </>

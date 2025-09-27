@@ -27,12 +27,6 @@ export default function CreatePost({ onSuccess }) {
       const { data } = await api.post(
         "/community/recipes/",
         form,
-        {
-          headers: {
-            Authorization: `Bearer ${userTokenAccess}`,
-            "Content-Type": "application/json",
-          },
-        }
       );
       toast.success("تم إنشاء الوصفة بنجاح!");
       // تنظيف الفورم

@@ -1,11 +1,22 @@
-import  { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
 import { userContext } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import Questions from "./Questions/Questions";
 
-export default function Recipe() {
+function timeAgo(dateString) {
+  const now = new Date();
+  const date = new Date(dateString);
+  const diff = Math.floor((now - date) / 1000);
+
+  if (diff < 60) return `منذ ${diff} ثانية`;
+  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
+  return `منذ ${Math.floor(diff / 86400)} يوم`;
+}
+
+export default function RecipesList() {
   let { userTokenAccess } = useContext(userContext);
   const [recipes, setRecipes] = useState([]);
 
@@ -15,7 +26,6 @@ export default function Recipe() {
         Authorization: `Bearer ${userTokenAccess}`,
       },
     });
-    
     setRecipes(data.recipes);
   }
 
@@ -23,62 +33,50 @@ export default function Recipe() {
     getRecipes();
   }, []);
 
-  function firstNWords(text, n = 10) {
-    if (!text) return "";
-    const words = text.split(/\s+/);
-    if (words.length <= n) return text;
-    return words.slice(0, n).join(" ") + "…";
-  }
-
   return (
     <>
-   
       {recipes.length === 0 ? (
         <Loader />
       ) : (
-        <div className="min-h-screen py-12 px-6 font-cairo" >
-          <div className="max-w-4xl mx-auto">
-            <header className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-emerald-700 mb-4">
-                مجتمعنا
-              </h1>
-              <p className="text-lg text-gray-600 mb-6">مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي</p>
+        <div className=" py-10 font-cairo container mx-auto">
+        <header className="text-center mb-12"> <h1 className="text-4xl md:text-5xl font-bold text-emerald-700 mb-4"> مجتمعنا </h1> <p className="text-lg text-gray-600 mb-6">مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي</p> </header>
+          <div className=" mx-auto space-y-4">
+            {recipes.map((rec) => (
               <Link
-                to={"add"}
-                className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold"
+                to={`/community/recipes/${rec.id}`}
+                key={rec.id}
+                className="block bg-white rounded-lg shadow border border-gray-200 py-2 px-3 hover:shadow-md transition"
               >
-                أضف وصفة جديدة 🌿
-              </Link>
-            </header>
+              <article className="flex justify-between items-center mb-4">
+              <div >
 
-            <div className="grid gap-6">
-              {recipes.map((rec) => (
-                <Link
-                  key={rec.id}
-                  to={`/community/recipes/${rec.id}`}
-                  className="block bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-emerald-100 hover:border-emerald-200 p-6"
-                >
-                  <h3 className="text-xl font-semibold text-emerald-800 mb-3">
-                    {rec.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed mb-4">
-                    {firstNWords(rec.description, 10)}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-emerald-600 font-medium">{rec.author}</span>
-                    <div className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm">
-                      اقرأ المزيد
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                <h4 className="text-lg font-semibold text-emerald-700 mb-3">
+                  {rec.title}
+                </h4>
+                <div className="flex text-sm gap-3 text-gray-500 mb-4">
+                  <span className="font-medium flex items-center gap-1">
+                    <i className="fa fa-user text-emerald-600"></i>
+                  {rec.author}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <i className="fa fa-clock text-emerald-600"></i>
+                    {timeAgo(rec.created_at)}
+                  </span>
+                </div>
+              </div>
+                <p className="text-gray-600 text-sm max-w-3xl mx-auto leading-7 text-center">
+                  {rec.description.length > 100
+                    ? rec.description.substring(0, 200) + "..."
+                    : rec.description}
+                </p>
+              </article>
+                
+              </Link>
+            ))}
           </div>
         </div>
       )}
-
-      <Questions/>
+      <Questions />
     </>
   );
 }
-

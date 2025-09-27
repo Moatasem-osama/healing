@@ -4,7 +4,7 @@ import api from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 
 export default function QuestionDetail() {
-  const { id } = useParams(); // 🆔 id بتاع السؤال
+  const { id } = useParams();
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [newAnswer, setNewAnswer] = useState("");
@@ -12,21 +12,33 @@ export default function QuestionDetail() {
   async function getQuestion() {
     try {
       let { data } = await api.get(`/community/questions/${id}/`);
-      console.log(data);
-      
       setQuestion(data.question);
     } catch (err) {
       console.error("❌ Error fetching question:", err);
     }
   }
+  // ضيفها فوق الكومبوننت
+  function timeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diff = Math.floor((now - past) / 1000); // الفرق بالثواني
+
+    const days = Math.floor(diff / (60 * 60 * 24));
+    const hours = Math.floor((diff % (60 * 60 * 24)) / (60 * 60));
+
+    if (days > 0) {
+      return `منذ ${days} يوم و ${hours} ساعة`;
+    } else if (hours > 0) {
+      return `منذ ${hours} ساعة`;
+    } else {
+      const minutes = Math.floor(diff / 60);
+      return minutes > 0 ? `منذ ${minutes} دقيقة` : "الآن";
+    }
+  }
 
   async function getAnswers() {
     try {
-      let { data } = await api.get(
-        `/community/questions/${id}/answers/`
-      );
-      console.log(data);
-      
+      let { data } = await api.get(`/community/questions/${id}/answers/`);
       setAnswers(data.answers);
     } catch (err) {
       console.error("❌ Error fetching answers:", err);
@@ -41,7 +53,7 @@ export default function QuestionDetail() {
       });
       toast.success("✅ تم إضافة إجابتك بنجاح!");
       setNewAnswer("");
-      getAnswers(); // حدث القائمة
+      getAnswers();
     } catch (err) {
       console.error("❌ Error adding answer:", err);
     }
@@ -53,60 +65,95 @@ export default function QuestionDetail() {
   }, [id]);
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-md mt-12 vh-100">
-      {question && (
-        <>
-          <h2 className="text-2xl font-bold text-emerald-700 mb-2">
-            ❓ {question.title}
-          </h2>
-          <p className="text-gray-700 mb-4">{question.body}</p>
-          <div className="text-sm text-gray-500 mb-6">
-            ✍️ {question.author} | 🕒{" "}
-            {new Date(question.created_at).toLocaleDateString("ar-EG")}
+    <div className="max-w-7xl mx-auto py-8 px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="md:col-span-3 space-y-6">
+        {/* السؤال */}
+        {question && (
+          <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+            <h2 className="text-2xl font-bold text-emerald-700 mb-3">
+              {question.title}
+            </h2>
+            <p className="text-gray-700 leading-relaxed">{question.body}</p>
           </div>
-        </>
-      )}
-
-      {/* الإجابات */}
-      <h3 className="text-xl font-semibold text-emerald-600 mb-4">
-        💬 الإجابات
-      </h3>
-      <div className="space-y-4 mb-6">
-        {answers.length > 0 ? (
-          answers.map((a) => (
-            <div
-              key={a.id}
-              className="p-4 border border-emerald-100 rounded-xl bg-emerald-50"
-            >
-              <p className="text-gray-800">{a.body}</p>
-              <span className="text-xs text-gray-500 block mt-2">
-                ✍️ {a.author} | 🕒{" "}
-                {new Date(a.created_at).toLocaleDateString("ar-EG")}
-              </span>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">لا توجد إجابات بعد.</p>
         )}
+
+        {/* التعليقات */}
+        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-emerald-700 mb-4 flex items-center gap-2">
+            <i className="fa fa-comments"></i>
+            التعليقات ({answers.length})
+          </h3>
+
+          <div className="space-y-4 mb-6">
+            {answers.length > 0 ? (
+              answers.map((a) => (
+                <div key={a.id} className="border-b border-gray-100 pb-3">
+                  <p className="text-gray-800">{a.body}</p>
+                  <div className="text-xs text-gray-500 mt-2 flex items-center gap-3">
+                    <i className="fa fa-user text-emerald-600"></i>
+                    {a.author}
+                    <span className="text-gray-400">|</span>
+                    <i className="fa fa-clock text-emerald-600"></i>
+                    {new Date(a.created_at).toLocaleDateString("ar-EG")}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 italic">لا توجد تعليقات بعد.</p>
+            )}
+          </div>
+
+          {/* إضافة تعليق */}
+          <form onSubmit={handleAddAnswer} className="space-y-4">
+            <textarea
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+              placeholder="أضف تعليقك هنا..."
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+              rows="3"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-emerald-600 text-white px-5 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2"
+            >
+              <i className="fa fa-plus"></i> أضف تعليق
+            </button>
+          </form>
+        </div>
       </div>
 
-      {/* إضافة إجابة */}
-      <form onSubmit={handleAddAnswer} className="space-y-4">
-        <textarea
-          value={newAnswer}
-          onChange={(e) => setNewAnswer(e.target.value)}
-          placeholder="✍️ أضف إجابتك هنا..."
-          className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-emerald-500"
-          rows="3"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-emerald-600 text-white px-6 py-2 rounded-xl hover:bg-emerald-700 transition"
-        >
-          ➕ نشر الإجابة
-        </button>
-      </form>
+      <div className="space-y-4">
+  {/* عن السؤال */}
+  <div className="bg-white rounded-lg shadow border border-gray-200 p-5">
+    <h4 className="font-semibold text-gray-700 mb-4 flex items-center gap-2">
+      <i className="fa fa-info-circle text-emerald-600"></i>
+      عن السؤال
+    </h4>
+
+    {/* تاريخ النشر */}
+    <div className="flex justify-between items-center text-sm text-gray-600 border-b border-gray-200 pb-3 mb-3">
+      <span className="flex items-center gap-2">
+        <i className="fa fa-calendar text-emerald-600"></i>
+        تاريخ النشر
+      </span>
+      <span>{question && timeAgo(question.created_at)}</span>
+    </div>
+
+    {/* ناشر السؤال */}
+    <div className="flex items-center gap-3">
+      <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
+        <i className="fa fa-user text-emerald-600 text-xl"></i>
+      </div>
+      <div>
+        <p className="text-sm font-medium">{question?.author}</p>
+        <span className="text-xs text-gray-500">ناشر السؤال</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
     </div>
   );
 }

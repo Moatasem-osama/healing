@@ -26,8 +26,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    // تحقق من الخطأ (401 Unauthorized) + وجود refreshToken
+en
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&

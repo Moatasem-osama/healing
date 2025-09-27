@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Report from "../Report/Report";
 import Loader from "../Loader/Loader";
 import { DataContext } from "../../context/DataContext";
+import Stats from "./Stats/Stats";
 
 export default function Dashboard() {
   let { userTokenAccess } = useContext(userContext);
@@ -180,16 +181,12 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                  <h1 className="text-2xl font-bold text-gray-800 mb-6">
-                    الإحصائيات
-                  </h1>
-                </div>
+ <Stats/>
               </main>
             </div>
           </div>
         </section>
+       
       )}
     </>
   );

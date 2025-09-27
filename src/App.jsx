@@ -26,9 +26,10 @@ import MedicalTests from "./components/MedicalTests/MedicalTests";
 import UpdateMedicalTests from "./components/MedicalTests/UpdateMedicalTests";
 import Recipe from "./components/Community/Recipe";
 import RecipeDetails from "./components/Community/RecipeDetails";
-import Answer from "./components/Community/Questions/Answer";
 import QuestionDetail from "./components/Community/Questions/QuestionDetail";
 import DataContextProvider from "./context/DataContext";
+import PostStats from "./components/Dashboard/Stats/PostStats";
+import AddQuestion from "./components/Community/Questions/AddQuestion";
 
 
 
@@ -43,6 +44,7 @@ let routers = createHashRouter([
       { path: "editProfile", element: <ProtectedRoute><EditProfileInfo /></ProtectedRoute> },
       { path: "login", element: <Login /> },
       { path: "dashboard", element: <ProtectedRoute> <Dashboard /></ProtectedRoute> },
+      { path: "dashboard/stats/poststats", element: <ProtectedRoute> <PostStats /></ProtectedRoute> },
       { path: "stories", element: <ProtectedRoute><Stories /></ProtectedRoute> },
       { path: "medicalTests/add", element: <ProtectedRoute><PostMedicalTest /></ProtectedRoute> },
       { path: "medicalTests/update/:id", element: <ProtectedRoute><UpdateMedicalTests /></ProtectedRoute> },
@@ -51,6 +53,7 @@ let routers = createHashRouter([
       { path: "appointments/edit/:id", element: <ProtectedRoute><EditAppointment /></ProtectedRoute> },
       { path: "appointments/delete/:id", element: <ProtectedRoute><DeleteAppointment /></ProtectedRoute> },
       { path: "community/recipes", element: <ProtectedRoute><Recipe /></ProtectedRoute> },
+      { path: "community/questions/add", element: <ProtectedRoute><AddQuestion /></ProtectedRoute> },
       { path: "community/questions/:id", element: <ProtectedRoute><QuestionDetail /></ProtectedRoute> },
       { path: "community/recipes/:id", element: <ProtectedRoute><RecipeDetails /></ProtectedRoute> },
       { path: "community/recipes/add", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
