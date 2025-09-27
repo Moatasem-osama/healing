@@ -38,8 +38,10 @@ export default function RecipesList() {
       {recipes.length === 0 ? (
         <Loader />
       ) : (
-        <div className=" py-10 font-cairo container mx-auto">
-        <header className="text-center mb-12"> <h1 className="text-4xl md:text-5xl font-bold text-emerald-700 mb-4"> مجتمعنا </h1> <p className="text-lg text-gray-600 mb-6">مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي</p> </header>
+        <div className=" py-10 font-cairo container p-5 mx-auto">
+        <header className="text-center mb-12"> <h1 className="text-4xl md:text-5xl font-bold text-emerald-700 mb-4"> مجتمعنا </h1> <p className="text-lg text-gray-600 mb-6">مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي</p> 
+        <Link to={'add'} className="inline-flex items-center gap-2 bg-emerald-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold hover:shadow-emerald-200 hover:shadow-xl hover:-translate-y-1"><span>أضف وصفة جديدة</span> <span className="text-lg">🌿</span></Link>
+        </header>
           <div className=" mx-auto space-y-4">
             {recipes.map((rec) => (
               <Link
@@ -64,9 +66,9 @@ export default function RecipesList() {
                   </span>
                 </div>
               </div>
-                <p className="text-gray-600 text-sm max-w-3xl mx-auto leading-7 text-center">
+                <p className="text-gray-600 text-sm max-w-xs mx-auto leading-7 text-center hidden md:block">
                   {rec.description.length > 100
-                    ? rec.description.substring(0, 200) + "..."
+                    ? rec.description.substring(0, 150) + "..."
                     : rec.description}
                 </p>
               </article>

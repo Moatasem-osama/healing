@@ -1,18 +1,14 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import api from "../../utils/axiosInstance";
-import { userContext } from "../../../context/UserContext";
 import toast from "react-hot-toast";
 
 export default function CreatePost({ onSuccess }) {
-  const { userTokenAccess } = useContext(userContext);
 
   const [form, setForm] = useState({
     title: "",
     description: "",
     ingredients: "",
-    instructions: "",
-    // ممكن تضيف حقول أخرى مثل image, category إذا تحتاجها
-  });
+    instructions: "",});
 
   const [loading, setLoading] = useState(false);
 
@@ -48,6 +44,16 @@ export default function CreatePost({ onSuccess }) {
   return (
     <div className="flex justify-center items-start pt-8 px-4">
       <div className="max-w-xl w-full bg-white rounded-xl shadow border border-emerald-100 p-6">
+    <div
+      className="flex items-start gap-3 p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50  shadow-md border-l-4 border-yellow-400"
+      role="alert"
+    >
+      <i className="fa fa-exclamation-triangle mt-1 text-xl"></i>
+      <div className="flex-1">
+        <span className="font-semibold">تنويه:</span>{" "}
+        الوصفات تخضع لمراجعة تلقائية بواسطة الذكاء الاصطناعي قبل النشر أو الرفض.
+      </div>
+    </div>
         <h2 className="text-2xl font-bold text-emerald-700 mb-4 text-center">
           إنشاء وصفة جديدة
         </h2>

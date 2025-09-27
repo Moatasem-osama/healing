@@ -23,13 +23,14 @@ export default function Register() {
       localStorage.setItem("refreshToken", data.tokens.refresh);
       setUserTokenAccess(data.tokens.access);
       setUserTokenRefresh(data.tokens.refresh);
-
       toast.success("تم التسجيل بنجاح!");
+      console.log(data)
       navigate("/");
     } catch (error) {
       let serverMessage = error.response?.data?.error;
       let translatedMessage =
         errorMessages[serverMessage] || "حدث خطأ غير متوقع، حاول مرة أخرى.";
+        console.error()
       toast.error(translatedMessage);
     } finally {
       setLoading(false);
