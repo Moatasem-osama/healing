@@ -65,22 +65,23 @@ export default function Summary() {
         <div className="p-4 bg-emerald-50 rounded-lg text-center">
           <h3 className="font-semibold">عدد الإدخالات</h3>
           <p className="text-2xl font-bold text-emerald-700">
-            {summary.total_entries}
+            {summary.total_entries || 0}
           </p>
         </div>
         <div className="p-4 bg-emerald-50 rounded-lg text-center">
           <h3 className="font-semibold">متوسط السكر</h3>
           <p className="text-2xl font-bold text-emerald-700">
-            {summary.sugar_avg}
+            {summary.sugar_avg || <span className="text-sm my-2">لا توجد بيانات متاحة</span>}
           </p>
         </div>
         <div className="p-4 bg-emerald-50 rounded-lg text-center">
           <h3 className="font-semibold">متوسط الضغط</h3>
           <p className="text-lg font-bold text-emerald-700">
-            {(
-              (summary.bp_systolic_avg + summary.bp_diastolic_avg) /
-              2
-            ).toFixed(1)}
+            {summary.bp_systolic_avg && summary.bp_diastolic_avg
+  ? ((summary.bp_systolic_avg + summary.bp_diastolic_avg) / 2).toFixed(1)
+  : <span className="text-sm my-2">لا توجد بيانات متاحة</span>
+  }
+
           </p>
         </div>
       </div>

@@ -1,24 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "../utils/axiosInstance";
-import { userContext } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function EditProfileInfo() {
-  let { userTokenAccess } = useContext(userContext);
   const [userInfo, setUserInfo] = useState(null);
   let navigate = useNavigate();
   async function getUserInfo() {
     try {
       let { data } = await api.get(
         `/auth/account/userProfile/`,
-        {
-          headers: {
-            Authorization: `Bearer ${userTokenAccess}`,
-          },
-        }
       );
       setUserInfo(data.user);
 
@@ -32,11 +25,6 @@ export default function EditProfileInfo() {
       await api.put(
         `/auth/account/userProfile/`,
         values,
-        {
-          headers: {
-            Authorization: `Bearer ${userTokenAccess}`,
-          },
-        }
       );
       toast.success("تم تعديل البيانات بنجاح");
       navigate('/dashboard')
@@ -49,16 +37,30 @@ export default function EditProfileInfo() {
     getUserInfo();
   }, []);
 
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     first_name: Yup.string().required("مطلوب"),
     last_name: Yup.string().required("مطلوب"),
-    age: Yup.number().required("مطلوب"),
-    gender: Yup.string().required("مطلوب"),
-    diseases: Yup.string(),
+     age: Yup.number()
+          .nullable()
+          .min(10, "العمر يجب أن يكون أكبر من 10 سنوات")
+          .max(120, "يرجى إدخال عمر صحيح")
+          .required("العمر مطلوب"),
+        height: Yup.number()
+          .nullable()
+          .min(50, "الطول غير صحيح")
+          .max(200, "الطول غير صحيح")
+          .required("الطول مطلوب"),
+        weight: Yup.number()
+          .nullable()
+          .min(15, "الوزن غير صحيح")
+          .max(300, "الوزن غير صحيح")
+          .required("الوزن مطلوب"),
+        gender: Yup.string()
+          .oneOf(["ذكر", "أنثى"], "الرجاء اختيار الجنس")
+          .required("الجنس مطلوب"),
+     diseases: Yup.string(),
     allergies: Yup.string(),
     medications: Yup.string(),
-    height: Yup.number(),
-    weight: Yup.number(),
   });
 
   return (
@@ -107,8 +109,8 @@ export default function EditProfileInfo() {
                   <label className="block text-lg font-semibold text-emerald-700 mb-3">الجنس</label>
                   <Field as="select" name="gender" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                     <option value="">اختر</option>
-                    <option value="male">ذكر</option>
-                    <option value="female">أنثى</option>
+                    <option value="ذكر">ذكر</option>
+                    <option value="أنثى">أنثى</option>
                   </Field>
                   <ErrorMessage name="gender" component="div" className="text-red-500 mt-2 text-sm" />
                 </div>
@@ -116,11 +118,14 @@ export default function EditProfileInfo() {
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
                   <label className="block text-lg font-semibold text-emerald-700 mb-3">الوزن</label>
                   <Field name="weight" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                   <ErrorMessage name="weight" component="div" className="text-red-500 mt-2 text-sm" />
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
                   <label className="block text-lg font-semibold text-emerald-700 mb-3">الطول (سم)</label>
                   <Field name="height" className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+                   <ErrorMessage name="height" component="div" className="text-red-500 mt-2 text-sm" />
+
                 </div>
               </div>
 

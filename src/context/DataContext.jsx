@@ -4,11 +4,13 @@ import React, { createContext, useState } from "react";
 export const DataContext = createContext();
 
 export default function DataContextProvider({ children }) {
-  // عدد المواعيد
-  const [appointmentsCount, setAppointmentsCount] = useState(0);
+ const [appointmentsCount, setAppointmentsCount] = useState(
+  () => Number(localStorage.getItem("appointmentsCount")) || 0
+);
 
-  // عدد التحاليل
-  const [testsCount, setTestsCount] = useState(0);
+const [testsCount, setTestsCount] = useState(
+  () => Number(localStorage.getItem("testsCount")) || 0
+);
 
   return (
     <DataContext.Provider

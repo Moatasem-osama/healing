@@ -65,7 +65,7 @@ export default function Login() {
     onSubmit: login,
   });
 
-  return ( <div className="font-cairo flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[var(--color-secondary)] via-white to-[var(--color-primary-light)]">
+  return ( <div className="font-cairo flex pt-10 items-center justify-center bg-gradient-to-br from-[var(--color-secondary)] via-white to-[var(--color-primary-light)]">
     <div className="w-full max-w-4xl mx-auto flex flex-col md:flex-row bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
       <div className="w-full md:w-1/2 p-6 md:p-8 order-2 md:order-1">
         <form onSubmit={formik.handleSubmit}>

@@ -23,7 +23,7 @@ export default function Navbar() {
   ];
 
   const linkClass = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-semibold text-lg font-[var(--font-noto-arabic)] ${
+    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-semibold md:text-lg lg:text:md font-[var(--font-noto-arabic)] ${
       isActive
         ? "bg-emerald-600 text-white shadow-lg"
         : "text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
@@ -47,7 +47,7 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="bg-[#f1f2ec] backdrop-blur-lg fixed top-0 inset-x-0 z-50 shadow-sm border-b border-emerald-100 font-[var(--font-noto-arabic)]">
+    <nav className="bg-[#f1f2ec]  backdrop-blur-lg fixed top-0 inset-x-0 z-50 shadow-sm border-b border-emerald-100 font-[var(--font-noto-arabic)]">
       <div className="mx-auto px-6 py-1 flex justify-between items-center">
         <NavLink
           to="/"
@@ -72,7 +72,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 bg-emerald-100 px-4 py-2 rounded-xl text-emerald-700 font-semibold hover:bg-emerald-200 transition"
+                className="flex cursor-pointer items-center gap-2 bg-emerald-100 px-4 py-2 rounded-xl text-emerald-700 font-semibold hover:bg-emerald-200 transition"
               >
                 المزيد <i className="fa-solid fa-caret-down"></i>
               </button>

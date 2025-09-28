@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
+import { toast } from "react-hot-toast";
 import * as Yup from "yup";
-import api from "../../utils/axiosInstance";
+import api from "../../utils/axiosInstance"; // make sure this points to your configured Axios instance
 
 export default function AddQuestion() {
   const formik = useFormik({
@@ -18,12 +19,13 @@ export default function AddQuestion() {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        await api("/community/questions/", {
-          body: JSON.stringify(values),
-        });
+        // POST request to backend
+        await api.post("/community/questions/", values);
         resetForm();
+        toast.error("تم نشر السؤال بنجاح!");
       } catch (err) {
-        // ممكن تعمل handle UI error بدل console
+        console.error(err);
+        toast.error("حدث خطأ أثناء نشر السؤال.");
       }
     },
   });

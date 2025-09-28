@@ -74,10 +74,7 @@ export default function Home() {
           to="/chatbot"
           className="fixed bottom-8 right-8 flex items-center justify-center rounded-full bg-emerald-500 p-4 shadow-lg hover:bg-emerald-600 transition-all duration-300 z-10"
         >
-          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-          </svg>
+          <i className="fa fa-message fa-2x text-white"></i>
         </Link>
 
         <section className="py-16 px-6 max-w-6xl mx-auto">

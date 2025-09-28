@@ -18,6 +18,7 @@ export default function AppointmentsList() {
       const { data } = await api.get(`/appointments/all/`);
       setAppointments(data.appointments);
       setAppointmentsCount(data.appointments.length);
+      localStorage.setItem("appointmentsCount", data.appointments.length);
     } catch {
       toast.error("حدث خطأ أثناء تحميل المواعيد");
     } finally {
@@ -29,8 +30,11 @@ export default function AppointmentsList() {
     try {
       await api.delete(`/appointments/${id}/`);
       setAppointments((prev) => prev.filter((a) => a.id !== id));
-      toast.success("تم حذف الموعد بنجاح!");
-    } catch {
+      setAppointmentsCount((prev) => prev - 1);
+      localStorage.setItem("appointmentsCount", appointments.length - 1);
+      toast.success("تم حذف الموعد بنجاح");
+    } catch(err) {
+      console.log(err);
       toast.error("تعذر حذف الموعد");
     }
   }
@@ -102,7 +106,7 @@ export default function AppointmentsList() {
                       <div className="bg-emerald-100 p-2 rounded-lg ml-3">
                         👨‍⚕️
                       </div>
-                      <p className="text-lg text-gray-700">{a.appointments_to}</p>
+                      <p className="text-lg text-gray-700">{a.doctor_or_hospital}</p>
                     </div>
                     <div className="flex items-center">
                       <div className="bg-emerald-100 p-2 rounded-lg ml-3">
@@ -128,7 +132,7 @@ export default function AppointmentsList() {
                 <div className="flex justify-end pt-4 border-t border-emerald-100">
                   <button
                     onClick={() => handleDelete(a.id)}
-                    className="bg-red-100 text-red-600 px-6 py-2 rounded-xl hover:bg-red-200 transition-all duration-300 font-semibold flex items-center"
+                    className="bg-red-100 cursor-pointer text-red-600 px-6 py-2 rounded-xl hover:bg-red-200 transition-all duration-300 font-semibold flex items-center"
                     aria-label="حذف الموعد"
                   >
                     <span className="ml-2">🗑️</span>

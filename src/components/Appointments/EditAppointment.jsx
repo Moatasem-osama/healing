@@ -28,9 +28,7 @@ export default function EditAppointment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put("/appointments/all/", { ...form, id }, {
-        headers: { Authorization: `Bearer ${userTokenAccess}` },
-      });
+      await api.put("/appointments/all/", { ...form, id });
       alert("✅ Appointment updated successfully!");
     } catch (err) {
       console.error("❌ Error updating appointment:", err.response?.data || err);

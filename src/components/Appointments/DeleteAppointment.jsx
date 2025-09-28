@@ -1,10 +1,8 @@
-import { useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../utils/axiosInstance";
-import { userContext } from "../../context/UserContext";
+import toast from "react-hot-toast";
 
 export default function DeleteAppointment() {
-  const { userTokenAccess } = useContext(userContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -12,12 +10,9 @@ export default function DeleteAppointment() {
     if (!window.confirm("⚠️ Are you sure you want to delete this appointment?")) return;
 
     try {
-      await api.delete("/appointments/all/", {
-        headers: { Authorization: `Bearer ${userTokenAccess}` },
-        data: { id }, // مهم جدًا 👈
-      });
-      alert("✅ Appointment deleted successfully!");
-      navigate("/appointments"); // رجع للـ list
+      await api.delete("/appointments/all/", {data: { id }});
+      toast.success("✅ Appointment deleted successfully!");
+      navigate("/appointments");
     } catch (err) {
       console.error("❌ Error deleting appointment:", err.response?.data || err);
     }

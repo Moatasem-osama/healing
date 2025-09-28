@@ -37,19 +37,19 @@ export default function Report() {
   }
 
   return (
-    <div className="p-6 flex gap-4">
+    <>
       <button
         onClick={() => fetchReport(true)}
-        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition shadow-md"
+        className="bg-green-600 w-full my-3 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition shadow-md"
       >
         تحميل التقرير
       </button>
       <button
         onClick={() => fetchReport(false)}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
+        className="bg-blue-600 w-full text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
       >
         معاينة التقرير
       </button>
-    </div>
+    </>
   );
 }

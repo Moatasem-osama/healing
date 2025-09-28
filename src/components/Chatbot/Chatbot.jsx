@@ -68,99 +68,99 @@ export default function Chatbot() {
   }
 
   return (
-    <section className="min-h-screen font-cairo py-8 px-4 flex flex-col bg-green-50">
-      <h1 className="text-2xl md:text-3xl font-bold text-green-900 mb-6 text-center">
-        عشبة شفاء بوت
-      </h1>
-
-      {!nameSubmitted ? (
-        <form
-          onSubmit={handleNameSubmit}
-          className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-lg space-y-4"
-          aria-label="نموذج إدخال الاسم لبدء المحادثة"
-        >
-          <label htmlFor="username" className="block font-semibold text-gray-700">
-            من فضلك أدخل اسمك للبدء:
-          </label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="اكتب اسمك..."
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
-            required
-            aria-required="true"
-          />
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
-          >
-            بدء المحادثة
-          </button>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-        </form>
-      ) : (
-        <>
-          <div
-            className="flex-1 overflow-y-auto mb-4 px-2 md:px-8"
-            aria-live="polite"
-            aria-label="منطقة الرسائل"
-          >
-            <div className="flex flex-col gap-4 max-w-4xl mx-auto">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg break-words ${
-                    msg.isBot
-                      ? "bg-emerald-900 text-white mr-auto"
-                      : "bg-white/90 ml-auto"
-                  }`}
-                  role="text"
-                >
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                </div>
-              ))}
-
-              {isLoading && (
-                <div className="p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg bg-emerald-900 text-white mr-auto">
-                  <span className="animate-pulse">جاري التفكير...</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="px-2 md:px-8 pb-4 mt-auto">
-            <div className="max-w-4xl mx-auto">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSendMessage();
-                }}
-                className="flex items-center bg-white shadow-xl rounded-full px-4 py-2"
-                aria-label="صندوق إدخال الرسالة"
-              >
-                <i className="fa-solid fa-robot text-green-700 mr-2"></i>
-                <textarea
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="اكتب سؤالك هنا..."
-                  className="flex-1 bg-transparent outline-none px-2 resize-none"
-                  rows={1}
-                  aria-label="حقل إدخال الرسالة"
-                />
-                <button
-                  type="submit"
-                  className="ml-2 text-green-700 hover:text-green-900 transition"
-                  aria-label="إرسال الرسالة"
-                >
-                  <i className="fa-solid fa-paper-plane"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-        </>
-      )}
-    </section>
+    <section className=" font-cairo py-9 container flex flex-col bg-green-50">
+         <h1 className="text-2xl md:text-3xl font-bold text-green-900 mb-6 text-center">
+           عشبة شفاء بوت
+         </h1>
+   
+         {!nameSubmitted ? (
+           <form
+             onSubmit={handleNameSubmit}
+             className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-lg space-y-4"
+             aria-label="نموذج إدخال الاسم لبدء المحادثة"
+           >
+             <label htmlFor="username" className="block font-semibold text-gray-700">
+               من فضلك أدخل اسمك للبدء:
+             </label>
+             <input
+               id="username"
+               type="text"
+               value={username}
+               onChange={(e) => setUsername(e.target.value)}
+               placeholder="اكتب اسمك..."
+               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+               required
+               aria-required="true"
+             />
+             <button
+               type="submit"
+               className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+             >
+               بدء المحادثة
+             </button>
+             {error && <p className="text-red-600 text-sm">{error}</p>}
+           </form>
+         ) : (
+           <>
+             <div
+               className="flex-1 overflow-y-auto mb-4 px-2 md:px-8"
+               aria-live="polite"
+               aria-label="منطقة الرسائل"
+             >
+               <div className="flex flex-col gap-4 max-w-4xl mx-auto h-100">
+                 {messages.map((msg, index) => (
+                   <div
+                     key={index}
+                     className={`p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg break-words ${
+                       msg.isBot
+                         ? "bg-emerald-900 text-white mr-auto"
+                         : "bg-white/90 ml-auto"
+                     }`}
+                     role="text"
+                   >
+                     <ReactMarkdown>{msg.text}</ReactMarkdown>
+                   </div>
+                 ))}
+   
+                 {isLoading && (
+                   <div className="p-4 rounded-2xl shadow-md max-w-xs md:max-w-md lg:max-w-lg bg-emerald-900 text-white mr-auto">
+                     <span className="animate-pulse">جاري التفكير...</span>
+                   </div>
+                 )}
+               </div>
+             </div>
+   
+             <div className="px-2 md:px-8 mt-auto">
+               <div className="max-w-4xl mx-auto">
+                 <form
+                   onSubmit={(e) => {
+                     e.preventDefault();
+                     handleSendMessage();
+                   }}
+                   className="flex items-center bg-white shadow-xl rounded-full px-4 py-2"
+                   aria-label="صندوق إدخال الرسالة"
+                 >
+                   <i className="fa-solid fa-robot text-green-700 mr-2"></i>
+                   <textarea
+                     value={inputValue}
+                     onChange={(e) => setInputValue(e.target.value)}
+                     placeholder="اكتب سؤالك هنا..."
+                     className="flex-1 bg-transparent outline-none px-2 resize-none "
+                     rows={2}
+                     aria-label="حقل إدخال الرسالة"
+                   />
+                   <button
+                     type="submit"
+                     className="ml-2 text-green-700 hover:text-green-900 transition"
+                     aria-label="إرسال الرسالة"
+                   >
+                     <i className="fa-solid fa-paper-plane"></i>
+                   </button>
+                 </form>
+               </div>
+             </div>
+           </>
+         )}
+       </section>
   );
 }
