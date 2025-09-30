@@ -1,10 +1,9 @@
-// src/context/AxiosInterceptor.jsx
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useContext } from "react";
 import api from "../components/utils/axiosInstance";
+import { userContext } from "./UserContext";
 
 export default function AxiosInterceptor({ children }) {
-  const navigate = useNavigate();
+  const { logout } = useContext(userContext);
 
   useEffect(() => {
     const resInterceptor = api.interceptors.response.use(
@@ -12,7 +11,6 @@ export default function AxiosInterceptor({ children }) {
       async (error) => {
         const originalRequest = error.config;
 
-        // لو السيرفر رجع Unauthorized وفيه Refresh Token
         if (
           error.response?.status === 401 &&
           !originalRequest._retry &&
@@ -21,28 +19,15 @@ export default function AxiosInterceptor({ children }) {
           originalRequest._retry = true;
           try {
             const refreshToken = localStorage.getItem("refreshToken");
+            const { data } = await api.post("/auth/token/refresh/", { refresh: refreshToken });
 
-            const { data } = await api.post(
-              "/auth/token/refresh/",
-              { refresh: refreshToken },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-
-            // ✅ خد بالك هنا: الريسبونس هيكون { access: "..."}
             localStorage.setItem("accessToken", data.access);
-
             api.defaults.headers.common["Authorization"] = `Bearer ${data.access}`;
             originalRequest.headers["Authorization"] = `Bearer ${data.access}`;
 
-            // إعادة نفس الـ request
             return api(originalRequest);
-          } catch (err) {localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            navigate("/login", { replace: true });
+          } catch (err) {
+            logout();
           }
         }
 
@@ -53,7 +38,7 @@ export default function AxiosInterceptor({ children }) {
     return () => {
       api.interceptors.response.eject(resInterceptor);
     };
-  }, [navigate]);
+  }, [logout]);
 
   return children;
 }

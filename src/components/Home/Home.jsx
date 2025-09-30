@@ -265,6 +265,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6">
             <p>© 2025 عشبة شفاء - جميع الحقوق محفوظة</p>
           </div>
+          <p className="mt-5">Tested by Testination - ITI Software Testing Team</p>
         </footer>
       </div>
   );
