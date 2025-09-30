@@ -15,7 +15,7 @@ export default function AxiosInterceptor({ children }) {
         // لو السيرفر رجع Unauthorized وفيه Refresh Token
         if (
           error.response?.status === 401 &&
-          !originalRequest?._retry &&
+          !originalRequest._retry &&
           localStorage.getItem("refreshToken")
         ) {
           originalRequest._retry = true;
@@ -28,22 +28,19 @@ export default function AxiosInterceptor({ children }) {
               {
                 headers: {
                   "Content-Type": "application/json",
-                  "ngrok-skip-browser-warning": "true",
                 },
               }
             );
 
+            // ✅ خد بالك هنا: الريسبونس هيكون { access: "..."}
             localStorage.setItem("accessToken", data.access);
 
-            // تحديث التوكن الجديد في headers
             api.defaults.headers.common["Authorization"] = `Bearer ${data.access}`;
             originalRequest.headers["Authorization"] = `Bearer ${data.access}`;
 
             // إعادة نفس الـ request
             return api(originalRequest);
-          } catch (err) {
-            // لو فشل التحديث → مسح التوكنات والرجوع للـ login
-            localStorage.removeItem("accessToken");
+          } catch (err) {localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             navigate("/login", { replace: true });
           }
@@ -53,7 +50,6 @@ export default function AxiosInterceptor({ children }) {
       }
     );
 
-    // تنظيف الـ interceptor عند unmount
     return () => {
       api.interceptors.response.eject(resInterceptor);
     };

@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { userContext } from "../../context/UserContext";
 import api from "../utils/axiosInstance.js";
@@ -26,6 +26,8 @@ export default function Login() {
       localStorage.setItem("refreshToken", data.tokens.refresh);
       setUserTokenAccess(data.tokens.access);
       setUserTokenRefresh(data.tokens.refresh);
+      console.log(data);
+      
       toast.success("تم تسجيل الدخول بنجاح!");
       navigate("/");
     } catch (error) {
@@ -65,7 +67,7 @@ export default function Login() {
     onSubmit: login,
   });
 
-  return ( <div className="font-cairo flex pt-10 items-center justify-center bg-gradient-to-br from-[var(--color-secondary)] via-white to-[var(--color-primary-light)]">
+  return ( <div className="font-cairo flex pt-10 items-center justify-center ">
     <div className="w-full max-w-4xl mx-auto flex flex-col md:flex-row bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
       <div className="w-full md:w-1/2 p-6 md:p-8 order-2 md:order-1">
         <form onSubmit={formik.handleSubmit}>
@@ -130,9 +132,9 @@ export default function Login() {
           )}
 
           <div className="text-center mt-4 md:mt-6">
-            <p className="text-gray-600 text-xs md:text-sm">
-              ان لم يكن لديك حساب برجاء تسجيل الدخول 
-            </p>
+            <Link to={'/register'} className="text-gray-600 font-bold text-xs md:text-sm">
+              ان لم يكن لديك حساب برجاء التسجيل  
+            </Link>
           </div>
         </form>
       </div>

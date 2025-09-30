@@ -22,12 +22,15 @@ export default function AddAppointment({ onSuccess }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post("/appointments/all/", form);
+      let {data}=await api.post("/appointments/all/", form);
       toast.success("تم إضافة الموعد بنجاح!");
       setForm(initialForm);
+      console.log(data);
+      
       if (onSuccess) onSuccess();
-    } catch {
-      toast.error("تعذر إضافة الموعد");
+    } catch(err) {
+      console.log(err);
+      toast.error(err.response.data.errors.non_field_errors ||"تعذر إضافة الموعد");
     } finally {
       setSubmitting(false);
     }

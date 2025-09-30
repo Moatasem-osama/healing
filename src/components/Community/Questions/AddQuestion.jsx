@@ -19,10 +19,9 @@ export default function AddQuestion() {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        // POST request to backend
         await api.post("/community/questions/", values);
         resetForm();
-        toast.error("تم نشر السؤال بنجاح!");
+        toast.success("تم نشر السؤال بنجاح!");
       } catch (err) {
         console.error(err);
         toast.error("حدث خطأ أثناء نشر السؤال.");

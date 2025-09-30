@@ -50,6 +50,11 @@ export default function RecipesList() {
       <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
         مكان لتبادل الأفكار والمناقشات حول الطب الطبيعي
       </p>
+       <div className="relative block mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-emerald-700 relative z-10">
+              وصفات الأجداد <i className="fas fa-leaf"></i>
+            </h1>
+            </div>
       <Link
         to="add"
         className="inline-flex items-center gap-2 bg-emerald-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-emerald-700 transition-all duration-300 font-semibold hover:shadow-emerald-200 hover:shadow-xl hover:-translate-y-1"
