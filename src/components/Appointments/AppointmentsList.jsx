@@ -112,7 +112,7 @@ export default function AppointmentsList() {
                         <i className="fa-solid fa-user-doctor text-emerald-700"></i>
                       </div>
                       <p className="text-lg text-gray-700">
-                        {a.doctor_or_hospital}
+                        {a.appointment_to}
                       </p>
                     </div>
                     <div className="flex items-center">
