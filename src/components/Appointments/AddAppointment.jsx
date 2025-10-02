@@ -7,7 +7,7 @@ export default function AddAppointment({ onSuccess }) {
     date: "",
     time: "",
     location: "",
-    appointment_to: "",
+    name: "",
     appointment_type: "regular",
     notes_or_details: "",
   };
@@ -110,7 +110,7 @@ export default function AddAppointment({ onSuccess }) {
                 id="name"
                 name="name"
                 placeholder="أدخل اسم الطبيب أو المستشفى..."
-                value={form.appointment_to}
+                value={form.name}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               />
